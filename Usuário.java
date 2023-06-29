@@ -49,6 +49,7 @@ public class Usuário {
         }
 
         System.out.println("Treinando o algoritmo genético...");
+
         // Coloque aqui a implementação para treinar o algoritmo genético
     }
 

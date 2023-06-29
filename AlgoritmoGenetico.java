@@ -9,8 +9,10 @@ public class AlgoritmoGenetico {
     public static void main(String[] args,String dificuldade) {
         
         double populacaoInicial[][] = gerarPopulacaoInicial();
+        double populacaoIntermediaria[][] = new double[qntCromossomos][qntPesos + 1];
         double melhorPopulacao[] = null;
         double melhorAptidao = Double.NEGATIVE_INFINITY;
+        Random aleatorio = new Random();
 
         for (int g = 0; g < numGeracoes; g++) {
             System.out.println("Numero da Geracao:"+g);
@@ -31,9 +33,11 @@ public class AlgoritmoGenetico {
             // Salvando a melhor população em um arquivo
             salvarMelhorPopulacao(melhorPopulacao, "melhor_populacao.txt");
 
-
-            double[] elitismo = elitismo(populacaoInicial);
-            System.out.println("Aptidão atual:"+ elitismo[elitismo.length - 1]);
+            populacaoIntermediaria[0]=elitismo(populacaoInicial);
+            crossOver(populacaoInicial, populacaoIntermediaria);
+            populacaoInicial = populacaoIntermediaria;
+            if(aleatorio.nextInt(2)==0) mutacao(populacaoInicial);
+            System.out.println("Aptidão atual:"+ elitismo(populacaoIntermediaria));
             System.out.println("Fim da Geracao:"+g);
             System.out.println("-------------------------------------------");
         
@@ -97,6 +101,48 @@ public class AlgoritmoGenetico {
         System.out.println("Melhor população salva em " + nomeArquivo);
     } catch (IOException e) {
         System.out.println("Erro ao salvar a melhor população: " + e.getMessage());
+        }
     }
-}
+        public static void mutacao(double [][]populacao){
+        Random gera = new Random();
+        int quantidade = gera.nextInt(3)+1;
+        
+        while(quantidade>0){
+            int linha = gera.nextInt(qntCromossomos -1 )+1;
+            int coluna = gera.nextInt(qntPesos - 1);
+        
+            if(populacao[linha][coluna]==0) populacao[linha][coluna] = 1;
+            else populacao[linha][coluna] = 0;
+            System.out.println("Mutacao no cromossomo: " + linha + " na coluna: " + coluna);
+            quantidade--;
+        }
+        
+    }
+    public static void crossOver(double[][] populacao, double[][] populacaoIntermediaria) {
+        for (int i = 0; i < qntCromossomos - 1; i += 2) {
+            int individuo1 = torneio(populacao);
+            int individuo2 = torneio(populacao);
+            for(int j= 0; j<qntCromossomos - 1; j++){
+                populacaoIntermediaria[i][j] = populacao[individuo1][j];
+                populacaoIntermediaria[i+1][j] = populacao[individuo2][j];
+            }
+            for(int j= 10; j<(qntCromossomos - 1)*2; j++){
+                populacaoIntermediaria[i][j] = populacao[individuo2][j];
+                populacaoIntermediaria[i+1][j] = populacao[individuo1][j];
+            }
+        }
+    }
+
+    
+    public static int torneio(double[][] populacao){
+        Random aleatorio = new Random();
+        
+        int linha1 = aleatorio.nextInt(qntCromossomos);
+        int linha2 = aleatorio.nextInt(qntCromossomos);
+        
+        if(populacao[linha1][qntPesos - 1]>populacao[linha2][qntPesos - 1]){
+            return linha2;
+        }
+        else return linha1;
+    }
 }
