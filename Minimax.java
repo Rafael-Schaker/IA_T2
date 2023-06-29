@@ -33,7 +33,7 @@ public class Minimax
         }
     }
     private Sucessor getMelhorFacil() {//NEW -> Dificuldade Facil, Seleciona um movimento aleatório como sucessor
-        System.out.println("Dificuldade FACIL");
+        System.out.println("\n Dificuldade do Minimax: FACIL");
         char[][][] vizinhos = new char[livres(estado)][3][3];
         int[][] posicoes = new int[vizinhos.length][2];
         geraVizinhos(vizinhos, estado, 'O', posicoes);
@@ -49,7 +49,7 @@ public class Minimax
      * @return devolve um objeto Sucessor. Esse objeto contém o estado sucessor e sua função de utilidade.
      */
     public Sucessor getMelhorMedio(){//REDONE -> Dificuldade Medio, Padrão do Minimax
-        System.out.println("Dificuldade MEDIO");
+        System.out.println("\n Dificuldade do Minimax: MEDIO");
         melhor = algoritmo(estado,false, livres(estado));     
         return melhor;
     }
@@ -59,7 +59,7 @@ public class Minimax
      * @return devolve um objeto Sucessor. Esse objeto contém o estado sucessor e sua função de utilidade.
      */
     public Sucessor getMelhorAB(){
-        System.out.println("Dificuldade DIFICIL");
+        System.out.println("\n Dificuldade do Minimax: DIFICIL");
         melhor = algoritmoAB(estado,false, livres(estado),-999,999);   
         return melhor;
     }
