@@ -1,19 +1,8 @@
-
-/**
- * Write a description of class Tabuleiro here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 public class TestaMinimax
 {
     private char[][] velha;
     
-    /**
-     * Cria e inicializa o tabuleiro do jogo do velha.
-     * Todas as posições inicial livres, ou seja, com #
-     */
-    public TestaMinimax(int tabuleiroVelha[][]){    //-1: celula livre  1: X   0: O
+    public TestaMinimax(int tabuleiroVelha[][]){   //Formato e base para o jogo da velha
         velha = new char[3][3];
         for(int i=0; i<3;i++) 
             for(int j=0; j<3;j++)
@@ -22,18 +11,14 @@ public class TestaMinimax
                      else velha[i][j]='O';
     }
     
-    /**
-     * Faz a jogada do computador, usando o algoritmo Minimax
-     */
+    //Indica a dificuldade do jogo
     public Sucessor joga(String dificuldade){
-        Minimax mini = new Minimax(velha,dificuldade); // REDON -> Adicionado a dificuladade, no momento da criação do jogo
+        Minimax mini = new Minimax(velha,dificuldade); // 
         Sucessor melhor = mini.getMelhor(); //chama versão clássica
         //return mini.getMelhorAB(); //chama versão Alfa Beta Pruning
         return melhor;
     }    
-    /**
-     * Gera um String do estado atual do tabuleiro
-     */
+    
     public String toString(){
         String saida=" ----- Jogo da Velha -----\n";
         for(int i=0; i<3; i++) saida = saida + "\t"+i;
@@ -45,8 +30,4 @@ public class TestaMinimax
         }
         return saida;
     }
-      
-
-    
-
 }

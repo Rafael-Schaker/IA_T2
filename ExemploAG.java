@@ -1,3 +1,4 @@
+//Sóm um exemplo, utilizado como inspiração para o AlgoritmoGenético.java
 import java.util.Random;
 
 public class ExemploAG {
@@ -112,9 +113,6 @@ public class ExemploAG {
         for(int i = 1; i<11; i+=2){
             int individuo1 = torneio(populacao);
             int individuo2 = torneio(populacao);
-            
-            //int padrasto = torneio(populacao);
-            //int madrasta = torneio(populacao);
             
             for(int j= 0; j<10; j++){
                 populacaoIntermeidiaria[i][j] = populacao[individuo1][j];

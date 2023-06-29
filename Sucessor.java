@@ -1,9 +1,3 @@
-/**
- * Write a description of class Estado here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 public class Sucessor
 {
     private int valor;

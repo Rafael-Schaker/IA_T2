@@ -47,11 +47,11 @@ public class Neuronio
     public double relu(double v){
         return Math.max(0,v);
     }
-    /* //RETIRAR MENSAGEM SOBRE CADA PESO ANALIZADO 
+     //RETIRAR MENSAGEM SOBRE CADA PESO ANALIZADO 
         public String toString(){
             String msg="";
             for(int i=0; i<pesos.length; i++) msg = msg + pesos[i]+ " ";
             return msg;
         } 
-    */
+    
 }

@@ -56,7 +56,7 @@ public class Rede
         }
         return saida;
     }
-    /* //RETIRAR MENSAGEM SOBRE CADA CAMADA
+     //RETIRAR MENSAGEM SOBRE CADA CAMADA
         public String toString(){
             String msg = "Pesos da rede\n";
             msg = msg + "Camada Oculta\n";
@@ -69,5 +69,5 @@ public class Rede
             }
             return msg;
         }
-    */
+    
 }

@@ -28,9 +28,9 @@ public class AlgoritmoGenetico {
             }
             System.out.println("Melhor Aptidão: " + melhorAptidao);
             // Apresenta a melhor população
-            //System.out.println("Melhor População: ");
-            //imprimirPopulacao(melhorPopulacao);
-            // Salvando a melhor população em um arquivo
+            System.out.println("Melhor População: ");
+            imprimirPopulacao(melhorPopulacao);
+            //Salvando a melhor população em um arquivo
             salvarMelhorPopulacao(melhorPopulacao, "melhor_populacao.txt");
 
             populacaoIntermediaria[0]=elitismo(populacaoInicial);

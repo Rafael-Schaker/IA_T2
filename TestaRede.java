@@ -53,34 +53,25 @@ public class TestaRede {
             }
         }
 
-        // ------------------------ EXEMPLO DE REDE
-        // ------------------------------------------
-        // Cria e configura a rede
-        // Criando a rede
-        int oculta = 9; // numero de neuronios da camada oculta
-        int saida = 9; // numero de neuronios da camada de saida
+        // Gerando a rede ------------------------------
+        int oculta = 9; // neuronios da camada oculta
+        int saida = 9; // neuronios da camada de saida
         rn = new Rede(oculta, saida); // topologia da rede: 9 neurônios na camada oculta e 9 na de saída
 
         // Simulando um cromossomo da populacao do AG
         Random gera = new Random();
-        int pesosOculta = oculta + 1; // numero de pesos por neuronio da camada oculta
-        int pesosSaida = saida + 1; // numero de pesos por neuronio da camada de saida
-        System.out.println("TAMANHO DO CROMOSSOMO: " + cromossomo.length);
+        System.out.println("tamanho do cromossomo: " + cromossomo.length);
 
         for (int i = 0; i < cromossomo.length; i++) {
             cromossomo[i] = gera.nextDouble();
             if (gera.nextBoolean())
                 cromossomo[i] = cromossomo[i] * -1;
-            // System.out.print(cromossomo[i] + " ");
         }
 
-        // Setando os pesos na rede
-        rn.setPesosNaRede(tabuleiro.length, cromossomo); //
+        rn.setPesosNaRede(tabuleiro.length, cromossomo); //Colocando os pesos na rede
 
         System.out.println();
-
-        // Exibe rede neural
-        System.out.println("Rede Neural - Pesos:" + rn);
+        System.out.println("Rede Neural:" + rn);
 
         // Execução da AG --------------------------------------
 
@@ -90,11 +81,10 @@ public class TestaRede {
             // Exibe um exemplo de propagação : saida dos neurônios da camada de saída
             double[] saidaRede = rn.propagacao(tabuleiro);
             System.out.println("\n Rede Neural -> Jogador1 = X");
-            /*  COMENTANDO SOBRE
+             // informação sobre cada neurônio
                 for (int i = 0; i < saidaRede.length; i++) {
                     System.out.println("Neuronio " + i + " : " + saidaRede[i]);
                 }
-            */
 
             // Define posicao a jogar de acordo com rede
             int indMaior = 0;
@@ -110,7 +100,7 @@ public class TestaRede {
             System.out.println("Neuronio de maior valor: " + indMaior + " - " + saidaRede[indMaior]);
             System.out.println("--> Rede escolheu - Linha: " + linha + " Coluna: " + coluna);
 
-            while (tabuleiroVelha[linha][coluna] != -1) {
+            while (tabuleiroVelha[linha][coluna] != -1) {//caso escolha errado é penalisado e entre em um loop até conseguir encontrar um local
                 System.out.println("Posicao ocupada");
                 qntErros++;
                 // Refaz o cálculo para encontrar um espaço vazio
