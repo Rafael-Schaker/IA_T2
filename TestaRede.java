@@ -24,12 +24,27 @@ public class TestaRede {
                 { -1, -1, -1 },
                 { -1, -1, -1 } };
 
-        System.out.println("\f\nTabuleiro inicial: ");
+        System.out.println("\f\nTabuleiro inicial: ");// Print do jogo reiniciado
         for (int i = 0; i < tabuleiroVelha.length; i++) {
             for (int j = 0; j < tabuleiroVelha.length; j++) {
-                System.out.print(tabuleiroVelha[i][j] + " \t");
+
+                if (tabuleiroVelha[i][j] == 1){
+                    System.out.print("X");
+                } else if (tabuleiroVelha[i][j] == 0) {
+                    System.out.print("O");
+                }else{
+                    System.out.print(" ");
+                }
+                
+                if (j < tabuleiroVelha[i].length - 1) {
+                    System.out.print(" | ");
+                }
+                
             }
             System.out.println();
+            if (i < tabuleiroVelha.length - 1) {
+                System.out.println("--+---+--");
+            }
         }
 
         // tabuleiro de teste - conversao de matriz para vetor
@@ -73,8 +88,7 @@ public class TestaRede {
         System.out.println();
 
         // Exibe rede neural
-        System.out.println("Rede Neural - Pesos: ");
-        System.out.println(rn);
+        System.out.println("Rede Neural - Pesos:" + rn);
 
         // --------------EXEMPLO DE EXECUCAO ----------------------------------------
 
@@ -83,10 +97,12 @@ public class TestaRede {
             System.out.println("\n\n>>>RODADA: " + n);
             // Exibe um exemplo de propagação : saida dos neurônios da camada de saída
             double[] saidaRede = rn.propagacao(tabuleiro);
-            System.out.println("Rede Neural - Camada de Saida: Valor de Y");
-            for (int i = 0; i < saidaRede.length; i++) {
-                System.out.println("Neuronio " + i + " : " + saidaRede[i]);
-            }
+            System.out.println("\n Rede Neural -> Jogador1 = O");
+            /*  COMENTANDO SOBRE
+                for (int i = 0; i < saidaRede.length; i++) {
+                    System.out.println("Neuronio " + i + " : " + saidaRede[i]);
+                }
+            */
 
             // Define posicao a jogar de acordo com rede
             int indMaior = 0;
@@ -112,9 +128,24 @@ public class TestaRede {
                 System.out.println("\nTabuleiro apos jogada: ");
                 for (int i = 0; i < tabuleiroVelha.length; i++) {
                     for (int j = 0; j < tabuleiroVelha.length; j++) {
-                        System.out.print(tabuleiroVelha[i][j] + "\t");
+                        
+                        if (tabuleiroVelha[i][j] == 1){
+                            System.out.print("X");
+                        } else if(tabuleiroVelha[i][j] == 0){
+                            System.out.print("O");
+                        }else{
+                            System.out.print(" ");
+                        }
+                    
+                        if (j < tabuleiroVelha[i].length - 1) {
+                            System.out.print(" | ");
+                        }
+                            
                     }
                     System.out.println();
+                    if (i < tabuleiroVelha.length - 1) {
+                        System.out.println("--+---+--");
+                    }
                 }
             }
 
@@ -143,12 +174,11 @@ public class TestaRede {
                 linhaMinimax = melhor.getLinha();
                 colunaMinimax = melhor.getColuna();
             }
-
-            System.out.println(
-                    ">>> MINIMAX escolheu - Linha: " + linhaMinimax + " Coluna: " + colunaMinimax);
+            System.out.println("\n MINIMAX -> Jogardor2 = X");
+            System.out.println(">>> MINIMAX escolheu - Linha: " + linhaMinimax + " Coluna: " + colunaMinimax);
 
             if (tabuleiroVelha[linhaMinimax][colunaMinimax] != -1) {
-                System.out.println("Posicao ocupada PELO MINIMAX");
+                System.out.println("Posicao ocupada");
                 return new Resultado(tabuleiroVelha, false);
             } else {
                 tabuleiroVelha[linhaMinimax][colunaMinimax] = 0;
@@ -156,9 +186,24 @@ public class TestaRede {
                 System.out.println("\nTabuleiro apos jogada: ");
                 for (int i = 0; i < tabuleiroVelha.length; i++) {
                     for (int j = 0; j < tabuleiroVelha.length; j++) {
-                        System.out.print(tabuleiroVelha[i][j] + "\t");
+
+                        if (tabuleiroVelha[i][j] == 1){
+                            System.out.print("X");
+                        } else if(tabuleiroVelha[i][j] == 0){
+                            System.out.print("O");
+                        }else{
+                            System.out.print(" ");
+                        }
+                    
+                        if (j < tabuleiroVelha[i].length - 1) {
+                            System.out.print(" | ");
+                        }
+                        
                     }
                     System.out.println();
+                    if (i < tabuleiroVelha.length - 1) {
+                        System.out.println("--+---+--");
+                    }
                 }
             }
 

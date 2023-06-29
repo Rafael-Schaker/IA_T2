@@ -1,3 +1,4 @@
+import java.util.Random;
 
 /**
  * Write a description of class Minimax here.
@@ -9,20 +10,46 @@ public class Minimax
 {
     private Sucessor melhor;
     private char[][] estado;
+    private String dificuldade; //New ->  Variavel para indicação da dificuldade do jogo
     
     /**
      * Minimax: algoritmo de busca adversária
      * @param estado corresponde ao estado atual do tabuleiro
+     * @param dificuldade corresponde ao dificuldade atual do jogo
      */
-    public Minimax(char [][]estado){
+    public Minimax(char [][]estado, String dificuldade){ //REDONE -> Alterado para ciração 
         this.estado = estado;
+        this.dificuldade = dificuldade;
     }
     
+    public Sucessor getMelhor(){
+        System.out.println("Dificuldade escolhida:" + dificuldade);
+        if (dificuldade == "Facil") {
+            return getMelhorFacil();
+        } else if (dificuldade == "Medio") {
+            return getMelhorMedio();
+        } else {
+            return getMelhorAB();// Dificuldade Dificil
+        }
+    }
+    private Sucessor getMelhorFacil() {//NEW -> Dificuldade Facil, Seleciona um movimento aleatório como sucessor
+        System.out.println("Dificuldade FACIL");
+        char[][][] vizinhos = new char[livres(estado)][3][3];
+        int[][] posicoes = new int[vizinhos.length][2];
+        geraVizinhos(vizinhos, estado, 'O', posicoes);
+        
+        Random random = new Random();
+        int randomIndex = random.nextInt(vizinhos.length);
+        
+        return new Sucessor(vizinhos[randomIndex], 0, posicoes[randomIndex][0], posicoes[randomIndex][1]);
+    }
+
     /**
      * Encontra o melhor estado sucessor ao estado atual. Usa a versão clássica do Minimax.
      * @return devolve um objeto Sucessor. Esse objeto contém o estado sucessor e sua função de utilidade.
      */
-    public Sucessor getMelhor(){
+    public Sucessor getMelhorMedio(){//REDONE -> Dificuldade Medio, Padrão do Minimax
+        System.out.println("Dificuldade MEDIO");
         melhor = algoritmo(estado,false, livres(estado));     
         return melhor;
     }
@@ -32,6 +59,7 @@ public class Minimax
      * @return devolve um objeto Sucessor. Esse objeto contém o estado sucessor e sua função de utilidade.
      */
     public Sucessor getMelhorAB(){
+        System.out.println("Dificuldade DIFICIL");
         melhor = algoritmoAB(estado,false, livres(estado),-999,999);   
         return melhor;
     }

@@ -7,26 +7,26 @@ public class AlgoritmoGenetico {
     public static void main(String[] args) {
         
         double populacaoInicial[][] = gerarPopulacaoInicial();
-        double populacaoIntermediaria[][] = new double[30][181];
+
 
         for (int g = 0; g < NUMERO_GERACOES; g++) {
-
+            System.out.println("Numero da Geracao:"+g);
             // Joga o jogo da velha
             for (int i = 0; i < QTD_CROMOSSOMOS; i++) {
                 Resultado resultado = new TestaRede().joga(populacaoInicial[i]);
                 populacaoInicial[i][QTD_PESOS] = calcularAptidao(resultado);
             }
 
-            for (double[] ds : populacaoInicial) {
-                System.out.println(ds[ds.length - 1]);
-            }
 
             double[] elitismo = elitismo(populacaoInicial);
             System.out.println(elitismo[elitismo.length - 1]);
+            System.out.println("Fim da Geracao:"+g);
+            System.out.println("-------------------------------------------");
+        
 
         }
     }
-
+    
     private static double[] elitismo(double[][] populacao) {
         double aux[] = new double[QTD_PESOS + 1];
         double maiorValor = populacao[0][QTD_PESOS];
@@ -47,7 +47,7 @@ public class AlgoritmoGenetico {
     }
 
     private static int calcularAptidao(Resultado resultado) {
-        return new Heuristic().evaluateMove(resultado.getTabuleiro(), 1, resultado.getIsEmpate());
+        return new Heuristica().avaliarMovimento(resultado.getTabuleiro(), 1, resultado.getIsEmpate());
     }
 
     private static double[][] gerarPopulacaoInicial() {
