@@ -18,7 +18,7 @@ public class AlgoritmoGenetico {
             System.out.println("Numero da Geracao:"+g);
             // Joga o jogo da velha
             for (int i = 0; i < qntCromossomos; i++) {
-                Tabuleiro Tabuleiro = new TestaRede().joga(populacaoInicial[i],dificuldade);
+                Tabuleiro Tabuleiro = new TestaRede().joga(populacaoInicial[i],dificuldade,true);//informa a população, dificuldade e se é treinamento ou n
                 populacaoInicial[i][qntPesos] = calcularAptidao(Tabuleiro);
                 // Verifica se a aptidão atual é a melhor encontrada até agora
                 if (populacaoInicial[i][qntPesos] > melhorAptidao) {

@@ -1,6 +1,9 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 
-public class Usuário {
+public class Usuario {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Bem-vindo ao Jogo da Velha!");
@@ -48,14 +51,28 @@ public class Usuário {
             System.out.println("Opção inválida. Encerrando o programa.");
         }
 
-        System.out.println("Treinando o algoritmo genético...");
+        System.out.println("Algoritmo genético Treinado");
 
         // Coloque aqui a implementação para treinar o algoritmo genético
     }
 
     public static void jogarContraAlgoritmoGenético() {
-        // Lógica para jogar contra o algoritmo genético
-        System.out.println("Jogando contra o algoritmo genético...");
-        // Coloque aqui a implementação para jogar contra o algoritmo genético
+        try (BufferedReader reader = new BufferedReader(new FileReader("melhor_populacao.txt"))) {
+            String linha = reader.readLine();
+            String[] valores = linha.split(" ");
+
+            double[] populacao = new double[valores.length];
+
+            for (int i = 0; i < valores.length; i++) {
+                populacao[i] = Double.parseDouble(valores[i]);
+            }
+            // Lógica para jogar contra o algoritmo genético
+            TestaRede testaRede = new TestaRede();
+            testaRede.joga(populacao, "Dificil", false);
+            System.out.println("Jogo contra o algoritmo genético encerrado!");
+        } catch (IOException e) {
+            System.out.println("Erro ao ler a melhor população: " + e.getMessage());
+        }
     }
+
 }
