@@ -23,7 +23,7 @@ public class Minimax
     }
     
     public Sucessor getMelhor(){
-        System.out.println("Dificuldade escolhida:" + dificuldade);
+        //System.out.println("Dificuldade escolhida:" + dificuldade);
         if (dificuldade == "Facil") {
             return getMelhorFacil();
         } else if (dificuldade == "Medio") {

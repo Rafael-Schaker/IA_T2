@@ -3,60 +3,38 @@ public class Heuristica {
     public Heuristica() {
     }
 
-    public int avaliarMovimento(int[][] tabuleiro, int jogador, boolean posicaoOcupada) {
+    public int avaliarMovimento(int[][] tabuleiro, int jogador, boolean isEmpate, int qntErros) {
         int pontuacao = 0;
 
         if (venceu(tabuleiro, jogador)) {
-            pontuacao += +100; // Pontuação alta positiva para vitória imediata
+            pontuacao += 200; // Caso de vitória
         } else if (venceu(tabuleiro, getOponente(jogador))) {
-            pontuacao += -60; // Pontuação alta negativa para derrota imediata
-        } else if (empate(tabuleiro)) {
-            pontuacao += 0; // Pontuação neutra para empate
+            pontuacao -= 70; // Caso de derrota
+        } else {
+            // Caso de empate - não recebe nem perde, tentou o seu melhor
+            pontuacao += avaliarMovimentosDeBloqueio(tabuleiro, jogador);
+            pontuacao += avaliarMovimentosDeOportunidade(tabuleiro, jogador);
+            pontuacao += avaliarVantagemPosicional(tabuleiro, jogador);
+            double percentualReducao = 0.1; // Ajuste o valor conforme necessário
+            pontuacao -= (int) (qntErros * percentualReducao);
+            pontuacao += avaliarRodadas(tabuleiro);
         }
-
-        // Avaliar movimentos de bloqueio
-        pontuacao += avaliarMovimentosDeBloqueio(tabuleiro, jogador);
-
-        // Avaliar criação de oportunidades
-        pontuacao += avaliarMovimentosDeOportunidade(tabuleiro, jogador);
-
-        // Avaliar vantagem posicional
-        pontuacao += avaliarVantagemPosicional(tabuleiro, jogador);
-
-        // Avaliar se a rede neural escolheu uma posição ocupada
-        pontuacao += posicaoOcupada ? -30 : 0;
-
-        // Avaliar quantas rodadas a rede neural jogou
-        pontuacao += avaliarRodadas(contarRodadas(tabuleiro));
 
         return pontuacao;
     }
 
-    private int contarRodadas(int[][] tabuleiro) {
-        int count = 0;
+    private int avaliarRodadas(int[][] tabuleiro) {
+        int qntRodadas = 0;
 
         for (int i = 0; i < tabuleiro.length; i++) {
             for (int j = 0; j < tabuleiro.length; j++) {
-                if (tabuleiro[i][j] == 1) {
-                    count++;
+                if (tabuleiro[i][j] != -1) {
+                    qntRodadas++;
                 }
             }
         }
 
-        return count;
-    }
-
-    private int avaliarRodadas(int count) {
-        switch (count) {
-            case 1:
-                return 10;
-            case 2:
-                return 20;
-            case 3:
-                return 30;
-            default:
-                return 40;
-        }
+        return qntRodadas * 10; // Multiplica a quantidade de rodadas jogadas por 10
     }
 
     private int avaliarMovimentosDeBloqueio(int[][] tabuleiro, int jogador) {
@@ -105,11 +83,11 @@ public class Heuristica {
 
         // Atribuir pontuações mais altas a posições estratégicas
         if (tabuleiro[1][1] == jogador) {
-            pontuacao += 3; // Posição central
+            pontuacao += 5; // Posição central
         }
         if (tabuleiro[0][0] == jogador || tabuleiro[0][2] == jogador ||
                 tabuleiro[2][0] == jogador || tabuleiro[2][2] == jogador) {
-            pontuacao += 2; // Posições de canto
+            pontuacao += 3; // Posições de canto
         }
 
         return pontuacao;
@@ -185,17 +163,6 @@ public class Heuristica {
         }
 
         return false;
-    }
-
-    private boolean empate(int[][] tabuleiro) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (tabuleiro[i][j] == -1) {
-                    return false; // Ainda existem células vazias
-                }
-            }
-        }
-        return true; // Todas as células estão preenchidas (empate)
     }
 
     private int getOponente(int jogador) {

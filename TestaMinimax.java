@@ -25,8 +25,8 @@ public class TestaMinimax
     /**
      * Faz a jogada do computador, usando o algoritmo Minimax
      */
-    public Sucessor joga(){
-        Minimax mini = new Minimax(velha,"Dificil"); // REDON -> Adicionado a dificuladade, no momento da criação do jogo
+    public Sucessor joga(String dificuldade){
+        Minimax mini = new Minimax(velha,dificuldade); // REDON -> Adicionado a dificuladade, no momento da criação do jogo
         Sucessor melhor = mini.getMelhor(); //chama versão clássica
         //return mini.getMelhorAB(); //chama versão Alfa Beta Pruning
         return melhor;

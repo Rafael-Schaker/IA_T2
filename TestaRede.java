@@ -11,12 +11,13 @@ public class TestaRede {
     private double[] tabuleiro;
     private int[][] tabuleiroVelha;
     private Rede rn;
+    private int qntErros;
 
     public TestaRede() {
 
     }
 
-    public Resultado joga(double cromossomo[]) {
+    public Tabuleiro joga(double cromossomo[],String dificuldade) {
         // ------------------------ EXEMPLO DE TABULEIRO
         // ------------------------------------------
         // tabuleiro do jogo da velha - Exemplo de teste
@@ -27,14 +28,8 @@ public class TestaRede {
         System.out.println("\f\nTabuleiro inicial: ");// Print do jogo reiniciado
         for (int i = 0; i < tabuleiroVelha.length; i++) {
             for (int j = 0; j < tabuleiroVelha.length; j++) {
-
-                if (tabuleiroVelha[i][j] == 1){
-                    System.out.print("X");
-                } else if (tabuleiroVelha[i][j] == 0) {
-                    System.out.print("O");
-                }else{
                     System.out.print(" ");
-                }
+                
                 
                 if (j < tabuleiroVelha[i].length - 1) {
                     System.out.print(" | ");
@@ -70,8 +65,6 @@ public class TestaRede {
         int pesosOculta = oculta + 1; // numero de pesos por neuronio da camada oculta
         int pesosSaida = saida + 1; // numero de pesos por neuronio da camada de saida
         int totalPesos = pesosOculta * oculta + pesosSaida * saida;
-        // 10 9 10 9
-        // double[] cromossomo = new double[totalPesos];
 
         System.out.println("TAMANHO DO CROMOSSOMO: " + cromossomo.length);
 
@@ -94,10 +87,10 @@ public class TestaRede {
 
         int n = 0;
         while (true) {
-            System.out.println("\n\n>>>RODADA: " + n);
+            System.out.println("\n --> RODADA: " + n);
             // Exibe um exemplo de propagação : saida dos neurônios da camada de saída
             double[] saidaRede = rn.propagacao(tabuleiro);
-            System.out.println("\n Rede Neural -> Jogador1 = O");
+            System.out.println("\n Rede Neural -> Jogador1 = X");
             /*  COMENTANDO SOBRE
                 for (int i = 0; i < saidaRede.length; i++) {
                     System.out.println("Neuronio " + i + " : " + saidaRede[i]);
@@ -116,107 +109,110 @@ public class TestaRede {
             int linha = indMaior / 3;
             int coluna = indMaior % 3;
             System.out.println("Neuronio de maior valor: " + indMaior + " - " + saidaRede[indMaior]);
-            System.out.println(">>> Rede escolheu - Linha: " + linha + " Coluna: " + coluna);
+            System.out.println("--> Rede escolheu - Linha: " + linha + " Coluna: " + coluna);
 
-            if (tabuleiroVelha[linha][coluna] != -1) {
-                // TODO Punir a rede
+            while (tabuleiroVelha[linha][coluna] != -1) {
                 System.out.println("Posicao ocupada");
-                return new Resultado(tabuleiroVelha, false);
-            } else {
-                tabuleiroVelha[linha][coluna] = 1;
+                qntErros++;
+                // Refaz o cálculo para encontrar um espaço vazio
+                indMaior++;
+                if (indMaior >= saidaRede.length) {
+                    // Indíce ultrapassou o tamanho máximo, volte ao início do tabuleiro
+                    indMaior = 0;
+                }
+                linha = indMaior / 3;
+                coluna = indMaior % 3;
+                System.out.println("Neuronio de maior valor: " + indMaior + " - " + saidaRede[indMaior]);
+                System.out.println("--> Rede escolheu - Linha: " + linha + " Coluna: " + coluna);
+            }
+            tabuleiroVelha[linha][coluna] = 1;
 
-                System.out.println("\nTabuleiro apos jogada: ");
-                for (int i = 0; i < tabuleiroVelha.length; i++) {
-                    for (int j = 0; j < tabuleiroVelha.length; j++) {
+            System.out.println("\nTabuleiro atual: ");
+            for (int i = 0; i < tabuleiroVelha.length; i++) {
+                for (int j = 0; j < tabuleiroVelha.length; j++) {
                         
-                        if (tabuleiroVelha[i][j] == 1){
-                            System.out.print("X");
-                        } else if(tabuleiroVelha[i][j] == 0){
-                            System.out.print("O");
-                        }else{
-                            System.out.print(" ");
-                        }
-                    
-                        if (j < tabuleiroVelha[i].length - 1) {
-                            System.out.print(" | ");
-                        }
-                            
+                    if (tabuleiroVelha[i][j] == 0){
+                        System.out.print("X");
+                    } else if(tabuleiroVelha[i][j] == 1){
+                        System.out.print("O");
+                    }else{
+                        System.out.print(" ");
+                    }
+                    if (j < tabuleiroVelha[i].length - 1) {
+                        System.out.print(" | ");
+                    }       
                     }
                     System.out.println();
                     if (i < tabuleiroVelha.length - 1) {
                         System.out.println("--+---+--");
                     }
                 }
-            }
+            
 
             // Verifica se há vencedor
             if (verificaVitoria(tabuleiroVelha)) {
-                System.out.println("Vitória da Rede Neural");
-                return new Resultado(tabuleiroVelha, false);
+                System.out.println("\nVitória da Rede Neural!!!");
+                return new Tabuleiro(tabuleiroVelha, false,qntErros);
             }
 
             // Verifica se há empate
             if (verificaEmpate(tabuleiroVelha)) {
-                System.out.println("Empate");
-                return new Resultado(tabuleiroVelha, true);
+                System.out.println("\nEmpate");
+                return new Tabuleiro(tabuleiroVelha, false,qntErros);
             }
 
             // -----------------------------------------JOGA MINIMAX
-            Random random = new Random();
-
             int linhaMinimax, colunaMinimax = 0;
-            if (Math.random() < 0.25) {
-                linhaMinimax = (int) random.nextInt(3);
-                colunaMinimax = (int) random.nextInt(3);
-            } else {
-                TestaMinimax mini = new TestaMinimax(tabuleiroVelha);
-                Sucessor melhor = mini.joga();
+            TestaMinimax mini = new TestaMinimax(tabuleiroVelha);
+            Sucessor melhor = mini.joga(dificuldade);
+            linhaMinimax = melhor.getLinha();
+            colunaMinimax = melhor.getColuna();
+            
+            System.out.println("\n MINIMAX -> Jogardor2 = X");
+            System.out.println("--> MINIMAX escolheu - Linha: " + linhaMinimax + " Coluna: " + colunaMinimax);
+
+            while (tabuleiroVelha[linhaMinimax][colunaMinimax] != -1) {
+                System.out.println("Posicao ocupada");
+                mini = new TestaMinimax(tabuleiroVelha);
+                melhor = mini.joga(dificuldade);
                 linhaMinimax = melhor.getLinha();
                 colunaMinimax = melhor.getColuna();
-            }
-            System.out.println("\n MINIMAX -> Jogardor2 = X");
-            System.out.println(">>> MINIMAX escolheu - Linha: " + linhaMinimax + " Coluna: " + colunaMinimax);
+                //return new Tabuleiro(tabuleiroVelha, false,qntErros);
+            } 
+            tabuleiroVelha[linhaMinimax][colunaMinimax] = 0;
 
-            if (tabuleiroVelha[linhaMinimax][colunaMinimax] != -1) {
-                System.out.println("Posicao ocupada");
-                return new Resultado(tabuleiroVelha, false);
-            } else {
-                tabuleiroVelha[linhaMinimax][colunaMinimax] = 0;
+            System.out.println("\nTabuleiro atual: ");
+            for (int i = 0; i < tabuleiroVelha.length; i++) {
+                for (int j = 0; j < tabuleiroVelha.length; j++) {
 
-                System.out.println("\nTabuleiro apos jogada: ");
-                for (int i = 0; i < tabuleiroVelha.length; i++) {
-                    for (int j = 0; j < tabuleiroVelha.length; j++) {
-
-                        if (tabuleiroVelha[i][j] == 1){
-                            System.out.print("X");
-                        } else if(tabuleiroVelha[i][j] == 0){
-                            System.out.print("O");
-                        }else{
-                            System.out.print(" ");
-                        }
-                    
-                        if (j < tabuleiroVelha[i].length - 1) {
-                            System.out.print(" | ");
-                        }
-                        
+                    if (tabuleiroVelha[i][j] == 1){
+                       System.out.print("O");
+                    } else if(tabuleiroVelha[i][j] == 0){
+                        System.out.print("X");
+                    }else{
+                        System.out.print(" ");
                     }
-                    System.out.println();
-                    if (i < tabuleiroVelha.length - 1) {
-                        System.out.println("--+---+--");
-                    }
+                    if (j < tabuleiroVelha[i].length - 1) {
+                        System.out.print(" | ");
+                    }  
+                }
+                System.out.println();
+                if (i < tabuleiroVelha.length - 1) {
+                   System.out.println("--+---+--");
                 }
             }
+            
 
             // Verifica se há vencedor
             if (verificaVitoria(tabuleiroVelha)) {
                 System.out.println("Vitória do Minimax");
-                return new Resultado(tabuleiroVelha, false);
+                return new Tabuleiro(tabuleiroVelha, false,qntErros);
             }
 
             // Verifica se há empate
             if (verificaEmpate(tabuleiroVelha)) {
                 System.out.println("Empate");
-                return new Resultado(tabuleiroVelha, true);
+                return new Tabuleiro(tabuleiroVelha, false,qntErros);
             }
 
             n++;

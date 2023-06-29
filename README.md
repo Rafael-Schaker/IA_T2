@@ -19,3 +19,8 @@ Alterado TestaMinimax, pois ali ele chama o Minimax, indicando como será o tabu
 -> Encontrado um problema que toda vez que uma posição já preenchida for escolhida, reseta o jogo
 -> Comentado Saidas do Neuronio, rede e TestaRede no exemplo de Rede
 
+--------------
+
+9:00
+
+Adicionado atributos que guardam o valor da melhor aptidão e a melhor população
